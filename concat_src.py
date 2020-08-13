@@ -12,7 +12,7 @@ def get_files_in_path(path, suffix, recursive):
                 fns.append(fn_full)
         elif recursive and os.path.isdir(fn_full):
             print('Found path {}'.format(fn_full))
-            fns_sub = get_files_in_path(fn_full, suffix)
+            fns_sub = get_files_in_path(fn_full, suffix, recursive)
             fns.extend(fns_sub)
     return fns
 
