@@ -45,13 +45,18 @@ class ImageAligner(object):
             raise Exception('No config for {}({})'.format(fn, idx))
         x_center, top = self._top_centers[idx]
         left = x_center - self._width // 2
-        im.crop((left, top, left + self._width, top + self._height))
+        im_cropped = im.crop((left,
+                              top,
+                              left + self._width,
+                              top + self._height))
+        '''
         dirname = os.path.dirname(fn)
         basename = os.path.basename(fn)
         fn_out = os.path.join(dirname, 'align_{}'.format(basename))
-        im.save(fn_out)
+        '''
+        im_cropped.save(fn)
         im.close()
-        print('Saved aligned image as {}'.format(fn_out))
+        print('Saved aligned image as {}'.format(fn))
 
     def align_images(self):
         if not os.path.isdir(self._path):
