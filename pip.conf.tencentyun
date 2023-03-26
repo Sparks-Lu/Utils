@@ -1,0 +1,5 @@
+[global]
+index-url=https://mirrors.tencentyun.com/pypi/simple
+
+[install]
+trusted-host=mirrors.tencentyun.com
