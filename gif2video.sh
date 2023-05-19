@@ -11,4 +11,4 @@ dirname='/tmp/gif2video'
 rm -rf $dirname
 mkdir $dirname
 convert -coalesce $fn_input "$dirname/%05d.png"
-ffmpeg -r $fps -loop 1 -t 3 -i "$dirname/%05d.png" $fn_output
+ffmpeg -r $fps -i "$dirname/%05d.png" $fn_output
