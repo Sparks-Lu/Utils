@@ -1,0 +1,19 @@
+version: '3.6'
+services:
+  gitlab:
+    image: 'gitlab/gitlab-ce:latest'
+    restart: always
+    environment:
+      TZ: 'Asia/Shanghai'
+      GITLAB_OMNIBUS_CONFIG: |
+        external_url 'http://49.235.106.119:30080'
+        # Add any other gitlab.rb configuration here, each on its own line
+    ports:
+      - '30080:30080' # 注意宿主机和容器内部的端口要一致，否则external_url无法访问
+      - '30443:443'
+      - '30022:22'
+    volumes:
+      - './config:/etc/gitlab'
+      - './logs:/var/log/gitlab'
+      - './data:/var/opt/gitlab'
+    shm_size: '256m'
