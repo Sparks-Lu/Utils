@@ -1,5 +1,5 @@
 #!/bin/sh
-files=`ls $1/*.JPG`
+files=`ls $1/*.jpg`
 ratio=$2
 echo "Scale ratio: $ratio, Files to be processed: $files"
 cnt=1
