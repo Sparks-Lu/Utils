@@ -21,7 +21,7 @@ def generate_cover_image_from_video(video_path, output_image_path):
 
 def generate_cover(input_path):
     for tmp_fn in os.listdir(input_path):
-        if tmp_fn.endswith('.mp4'):
+        if tmp_fn.endswith('.mp4') or tmp_fn.endswith('.mov'):
             base, _ = os.path.splitext(tmp_fn)
             fn_out = '{}_cover.jpg'.format(base)
             fn_full = os.path.join(input_path, tmp_fn)
