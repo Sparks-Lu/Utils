@@ -1,3 +1,6 @@
+#!/bin/bash
+
+version=4.6.0
 cwd=`pwd`
 install_deps() {
     sudo apt -y remove x264 libx264-dev
@@ -35,20 +38,32 @@ install_deps() {
     sudo apt -y install libgphoto2-dev libeigen3-dev libhdf5-dev doxygen
 }
 
+echo "Installing dependencies..."
 # install_deps
-git checkout 3.4
-cd ../opencv_contrib && git checkout 3.4
-cd $cwd
-rm -rf build
-mkdir build
-cd build
+echo "Downloading opencv $version..."
+# wget https://codeload.github.com/opencv/opencv/tar.gz/refs/tags/$version -O opencv-$version.tgz
+# tar zxvf opencv-$version.tgz
+# echo "Cloning opencv git repository v$version..."
+# git clone https://github.com/opencv/opencv
+# cd opencv && git checkout $version && cd ..
+echo "Downloading opencv_contrib v$version..."
+# wget https://codeload.github.com/opencv/opencv_contrib/tar.gz/refs/tags/$version -O opencv-contrib-$version.tgz
+# tar zxvf opencv-contrib-$version.tgz
+# echo "Cloning opencv_contrib git repository v$version..."
+# git clone https://github.com/opencv/opencv_contrib
+# cd opencv_contrib && git checkout $version && cd ..
+
+rm -rf opencv_build
+mkdir opencv_build
+cd opencv_build
+echo "Building opencv v$version..."
 cmake -D CMAKE_BUILD_TYPE=RELEASE \
     -D WITH_TBB=ON \
     -D WITH_V4L=OFF \
     -D WITH_LIBV4L=ON \
     -D WITH_QT=ON \
     -D WITH_OPENGL=ON \
-    -D OPENCV_EXTRA_MODULES_PATH=../../opencv_contrib/modules \
-    -D WITH_OPENCL=OFF .. >cmake.out 2>&1 && \
+    -D OPENCV_EXTRA_MODULES_PATH=../opencv_contrib-$version/modules \
+    -D WITH_OPENCL=OFF ../opencv-$version/ >cmake.out 2>&1 && \
     make -j >make.out 2>&1 && \
     sudo make install
