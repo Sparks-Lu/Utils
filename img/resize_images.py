@@ -31,8 +31,10 @@ def resize_img(fn_full, ratio=None, max_wh=None,
             raise RuntimeError('Invalid scale ratio, target width or '
                                'height')
     new_img = cv.resize(img, (dst_w, dst_h))
-    base, ext = os.path.splitext(fn_full)
-    new_fn = os.path.join(fn_full, f'{base}_{dst_w}x{dst_h}{ext}')
+    base, ext = os.path.splitext(os.path.basename(fn_full))
+    new_fn = os.path.join(os.path.dirname(fn_full),
+                          f'{base}_{dst_w}x{dst_h}{ext}')
+    # new_fn = os.path.join(fn_full, f'{base}_thumbnail.jpg')
     cv.imwrite(new_fn, new_img)
     print(f'Wrote image {new_fn}')
 
@@ -45,7 +47,7 @@ def resize_imgs(path, ratio=None, max_wh=None,
         else:
             ratio = float(ratio)
     if os.path.isfile(path):
-        resize_img(path, ratio, target_width, target_height)
+        resize_img(path, ratio, max_wh, target_width, target_height)
     elif os.path.isdir(path):
         fns = os.listdir(path)
         for tmp_fn in fns:

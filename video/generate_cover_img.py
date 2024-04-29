@@ -26,13 +26,20 @@ def generate_cover_image_from_video(video_path, output_image_path, max_wh):
 
 
 def generate_cover(input_path, max_wh):
-    for tmp_fn in os.listdir(input_path):
-        if tmp_fn.endswith('.mp4') or tmp_fn.endswith('.mov'):
-            base, _ = os.path.splitext(tmp_fn)
+    if os.path.isfile(input_path):
+        if input_path.endswith('.mp4') or input_path.endswith('.mov'):
+            base, _ = os.path.splitext(os.path.basename(input_path))
             fn_out = '{}_cover.jpg'.format(base)
-            fn_full = os.path.join(input_path, tmp_fn)
-            fn_out_full = os.path.join(input_path, fn_out)
-            generate_cover_image_from_video(fn_full, fn_out_full, max_wh)
+            fn_out_full = os.path.join(os.path.dirname(input_path), fn_out)
+            generate_cover_image_from_video(input_path, fn_out_full, max_wh)
+    elif os.path.isdir(input_path):
+        for tmp_fn in os.listdir(input_path):
+            if tmp_fn.endswith('.mp4') or tmp_fn.endswith('.mov'):
+                base, _ = os.path.splitext(tmp_fn)
+                fn_out = '{}_cover.jpg'.format(os.path.basename(base))
+                fn_full = os.path.join(input_path, tmp_fn)
+                fn_out_full = os.path.join(os.path.dirname(input_path), fn_out)
+                generate_cover_image_from_video(fn_full, fn_out_full, max_wh)
 
 
 def main():
