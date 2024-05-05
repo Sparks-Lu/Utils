@@ -2,9 +2,11 @@ import os
 import cv2 as cv
 
 
-def resize_img(fn_full, ratio=None, max_wh=None,
-               target_width=None, target_height=None):
-    img = cv.imread(fn_full)
+def resize_img(full_path, ratio=None, max_wh=None,
+               target_width=None, target_height=None,
+               replace=False
+              ):
+    img = cv.imread(full_path)
     img_h, img_w = img.shape[:2]
     ratio_tmp = ratio
     dst_w = None
@@ -31,23 +33,38 @@ def resize_img(fn_full, ratio=None, max_wh=None,
             raise RuntimeError('Invalid scale ratio, target width or '
                                'height')
     new_img = cv.resize(img, (dst_w, dst_h))
-    base, ext = os.path.splitext(os.path.basename(fn_full))
-    new_fn = os.path.join(os.path.dirname(fn_full),
-                          f'{base}_{dst_w}x{dst_h}{ext}')
-    # new_fn = os.path.join(fn_full, f'{base}_thumbnail.jpg')
-    cv.imwrite(new_fn, new_img)
-    print(f'Wrote image {new_fn}')
+    base, ext = os.path.splitext(os.path.basename(full_path))
+    if not replace:
+        full_path = os.path.join(os.path.dirname(full_path),
+                                 f'{base}_{dst_w}x{dst_h}{ext}')
+        # full_path = os.path.join(full_path, f'{base}_thumbnail.jpg')
+    cv.imwrite(full_path, new_img)
+    print(f'Wrote image {full_path}')
 
 
 def resize_imgs(path, ratio=None, max_wh=None,
-                target_width=None, target_height=None):
+                target_width=None, target_height=None,
+                replace=False):
     if ratio is not None:
         if len(ratio) == 0:
             ratio = None
         else:
             ratio = float(ratio)
     if os.path.isfile(path):
-        resize_img(path, ratio, max_wh, target_width, target_height)
+        ext = os.path.splitext(path)[-1]
+        ext = ext.lower()
+        if ext in ['.jpg', '.jpeg', '.png', '.bmp']:
+            resize_img(path, ratio, max_wh, target_width, target_height,
+                       replace)
+        elif ext in ['.txt']:
+            # list file
+            img_files = []
+            with open(path, 'r') as f_tmp:
+                img_files = f_tmp.readlines()
+            for img_file in img_files:
+                img_file = img_file.strip()
+                print(f'Resizing image file: {img_file}')
+                resize_img(img_file, ratio, max_wh, target_width, target_height, replace)
     elif os.path.isdir(path):
         fns = os.listdir(path)
         for tmp_fn in fns:
@@ -55,7 +72,8 @@ def resize_imgs(path, ratio=None, max_wh=None,
             ext = ext.lower()
             fn_full = os.path.join(path, tmp_fn)
             if ext in ['.jpg', '.jpeg', '.png']:
-                resize_img(fn_full, ratio, max_wh, target_width, target_height)
+                resize_img(fn_full, ratio, max_wh, target_width, target_height,
+                           replace)
     else:
         raise RuntimeError(f'Invalid path: {path}')
 
@@ -72,7 +90,9 @@ def main():
             target_width = input('Input target width: ')
             if target_width is None or len(target_width) == 0:
                 target_height = input('Input target height: ')
-    resize_imgs(path, ratio, max_wh, target_width, target_height)
+    replace = input('Replace original (1) or not (0): ')
+    replace = int(replace) > 0
+    resize_imgs(path, ratio, max_wh, target_width, target_height, replace)
 
 
 if __name__ == '__main__':
