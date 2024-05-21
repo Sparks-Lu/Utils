@@ -1,6 +1,6 @@
 #!/bin/sh
 sudo apt-get install -y libheif-examples
-files=`ls $1/*.HEIC`
+files=`ls $1/*.heic`
 echo "Files to be processed: $files"
 cnt=1
 for file in $files; do
