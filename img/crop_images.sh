@@ -6,11 +6,14 @@ if [ $# -lt 5 ]; then
     return -1
 fi
 cnt=1
+dirname=$1
+output_dir=${dirname}/output
+mkdir -p $output_dir
 for fn_in in $files; do
     dirname=$(dirname $fn_in)
     basename=$(basename $fn_in)
     # base="${dirname}/${basename%.*}.png"
-    fn_out="${dirname}/${cnt}.jpg"
+    fn_out="${output_dir}/${cnt}.jpg"
     xoffset=$2
     yoffset=$3
     width=$4
