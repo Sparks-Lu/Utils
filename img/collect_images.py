@@ -65,10 +65,18 @@ def collect_imgs(src_dir):
             continue
 
         subdir_path = os.path.join(src_dir, subdir)
-        fn_imgs = glob.glob(subdir_path + "/*.jpg") + \
-            glob.glob(subdir_path + "/*.png") + \
-            glob.glob(subdir_path + "/*.JPG") + \
-            glob.glob(subdir_path + "/*.PNG")
+        fn_imgs = []
+        if os.name == 'nt':
+            # ignore case
+            fn_imgs = glob.glob(subdir_path + "/*.jpg") + \
+                glob.glob(subdir_path + "/*.png")
+        elif os.name == 'posix':
+            fn_imgs = glob.glob(subdir_path + "/*.jpg") + \
+                glob.glob(subdir_path + "/*.png") + \
+                glob.glob(subdir_path + "/*.JPG") + \
+                glob.glob(subdir_path + "/*.PNG")
+        else:
+            raise Exception(f'Unsupported os: {os.name}')
         for fn_img in fn_imgs:
             src_path = os.path.join(subdir_path, fn_img)
             _, ext = os.path.splitext(fn_img)
