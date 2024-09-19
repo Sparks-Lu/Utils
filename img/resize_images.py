@@ -36,7 +36,8 @@ def resize_img(full_path, ratio=None, max_wh=None,
     base, ext = os.path.splitext(os.path.basename(full_path))
     if not replace:
         full_path = os.path.join(os.path.dirname(full_path),
-                                 f'{base}_{dst_w}x{dst_h}{ext}')
+                                 # f'{base}_{dst_w}x{dst_h}{ext}')
+                                 f'thumbnail_{base}{ext}')
         # full_path = os.path.join(full_path, f'{base}_thumbnail.jpg')
     cv.imwrite(full_path, new_img)
     print(f'Wrote image {full_path}')
