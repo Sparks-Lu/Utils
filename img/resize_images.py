@@ -6,7 +6,7 @@ def resize_img(full_path, ratio=None, max_wh=None,
                target_width=None, target_height=None,
                replace=False
               ):
-    img = cv.imread(full_path)
+    img = cv.imread(full_path, cv.IMREAD_UNCHANGED)
     img_h, img_w = img.shape[:2]
     ratio_tmp = ratio
     dst_w = None
@@ -54,7 +54,7 @@ def resize_imgs(path, ratio=None, max_wh=None,
     if os.path.isfile(path):
         ext = os.path.splitext(path)[-1]
         ext = ext.lower()
-        if ext in ['.jpg', '.jpeg', '.png', '.bmp']:
+        if ext in ['.jpg', '.jpeg', '.png', '.bmp', '.webp']:
             resize_img(path, ratio, max_wh, target_width, target_height,
                        replace)
         elif ext in ['.txt']:
@@ -72,7 +72,7 @@ def resize_imgs(path, ratio=None, max_wh=None,
             _, ext = os.path.splitext(tmp_fn)
             ext = ext.lower()
             fn_full = os.path.join(path, tmp_fn)
-            if ext in ['.jpg', '.jpeg', '.png']:
+            if ext in ['.jpg', '.jpeg', '.png', '.bmp', '.webp']:
                 resize_img(fn_full, ratio, max_wh, target_width, target_height,
                            replace)
     else:
