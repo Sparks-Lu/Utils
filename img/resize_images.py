@@ -39,7 +39,15 @@ def resize_img(full_path, ratio=None, max_wh=None,
                                  # f'{base}_{dst_w}x{dst_h}{ext}')
                                  f'thumbnail_{base}{ext}')
         # full_path = os.path.join(full_path, f'{base}_thumbnail.jpg')
-    cv.imwrite(full_path, new_img)
+    ext = ext.lower()
+    options = []
+    if ext == '.webp':
+        quality = 90
+        options = [cv.IMWRITE_WEBP_QUALITY, quality]
+    elif ext in ('.jpg', '.jpeg'):
+        quality = 90
+        options = [cv.IMWRITE_JPEG_QUALITY, quality]
+    cv.imwrite(full_path, new_img, options)
     print(f'Wrote image {full_path}')
 
 
