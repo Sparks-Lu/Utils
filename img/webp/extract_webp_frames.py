@@ -19,7 +19,7 @@ def extract_webp_frames(webp_file, output_dir):
 
 def main():
     webp_file = sys.argv[1]
-    output_dir = 'frames'
+    output_dir = os.path.join(os.path.dirname(webp_file), 'frames')
     extract_webp_frames(webp_file, output_dir)
 
 
