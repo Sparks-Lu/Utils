@@ -4,7 +4,7 @@ import cv2 as cv
 
 def resize_img(full_path, ratio=None, max_wh=None,
                target_width=None, target_height=None,
-               replace=False
+               replace=False, folder_name=''
               ):
     img = cv.imread(full_path, cv.IMREAD_UNCHANGED)
     img_h, img_w = img.shape[:2]
@@ -33,11 +33,13 @@ def resize_img(full_path, ratio=None, max_wh=None,
             raise RuntimeError('Invalid scale ratio, target width or '
                                'height')
     new_img = cv.resize(img, (dst_w, dst_h))
-    base, ext = os.path.splitext(os.path.basename(full_path))
+    basename = os.path.basename(full_path)
+    ext = os.path.splitext(basename)[-1]
     if not replace:
-        full_path = os.path.join(os.path.dirname(full_path),
-                                 # f'{base}_{dst_w}x{dst_h}{ext}')
-                                 f'thumbnail_{base}{ext}')
+        folder_path = os.path.join(os.path.dirname(full_path), folder_name)
+        if not os.path.isdir(folder_path):
+            os.makedirs(folder_path)
+        full_path = os.path.join(folder_path, basename)
         # full_path = os.path.join(full_path, f'{base}_thumbnail.jpg')
     ext = ext.lower()
     options = []
@@ -53,7 +55,7 @@ def resize_img(full_path, ratio=None, max_wh=None,
 
 def resize_imgs(path, ratio=None, max_wh=None,
                 target_width=None, target_height=None,
-                replace=False):
+                replace=False, folder_name=''):
     if ratio is not None:
         if len(ratio) == 0:
             ratio = None
@@ -64,7 +66,7 @@ def resize_imgs(path, ratio=None, max_wh=None,
         ext = ext.lower()
         if ext in ['.jpg', '.jpeg', '.png', '.bmp', '.webp']:
             resize_img(path, ratio, max_wh, target_width, target_height,
-                       replace)
+                       replace, folder_name)
         elif ext in ['.txt']:
             # list file
             img_files = []
@@ -73,7 +75,8 @@ def resize_imgs(path, ratio=None, max_wh=None,
             for img_file in img_files:
                 img_file = img_file.strip()
                 print(f'Resizing image file: {img_file}')
-                resize_img(img_file, ratio, max_wh, target_width, target_height, replace)
+                resize_img(img_file, ratio, max_wh, target_width,
+                           target_height, replace, folder_name)
     elif os.path.isdir(path):
         fns = os.listdir(path)
         for tmp_fn in fns:
@@ -82,13 +85,16 @@ def resize_imgs(path, ratio=None, max_wh=None,
             fn_full = os.path.join(path, tmp_fn)
             if ext in ['.jpg', '.jpeg', '.png', '.bmp', '.webp']:
                 resize_img(fn_full, ratio, max_wh, target_width, target_height,
-                           replace)
+                           replace, folder_name)
     else:
         raise RuntimeError(f'Invalid path: {path}')
 
 
 def main():
     path = input('Input path where image files locates: ')
+    if not os.path.isdir(path) and not os.path.isfile(path):
+        print(f'Invalid image folder: {path}')
+        return -1
     ratio = input('Input scale ratio: ')
     target_width = None
     target_height = None
@@ -101,7 +107,11 @@ def main():
                 target_height = input('Input target height: ')
     replace = input('Replace original (1) or not (0): ')
     replace = int(replace) > 0
-    resize_imgs(path, ratio, max_wh, target_width, target_height, replace)
+    folder_name = ''
+    if not replace:
+        folder_name = input('Folder name to store new files: ')
+    resize_imgs(path, ratio, max_wh, target_width, target_height, replace,
+                folder_name)
 
 
 if __name__ == '__main__':
