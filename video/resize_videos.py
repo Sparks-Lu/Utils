@@ -6,7 +6,7 @@ import subprocess
 def resize_video(fn_video, target_res, replace):
     if fn_video.endswith('.mp4'):
         base = os.path.splitext(fn_video)[0]
-        fn_out = '{}_540p.mp4'.format(base)
+        fn_out = f'{base}_{target_res}.mp4'
         fn_out_full = os.path.join(os.path.dirname(fn_video), fn_out)
         print(f'Processing file {fn_video}...')
         subprocess.call(['ffmpeg', '-i', fn_video,
