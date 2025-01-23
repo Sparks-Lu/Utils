@@ -24,9 +24,17 @@ echo "Cropped video: $crop_output_path"
 # resize and padding to leave top 0~200/2340 in video SNS app and bottom 1880~2340/2340
 # 0~400 <- 1680 -> 2080~2340
 # resize
-top_margin=300
-bottom_y=2080
-bottom_margin=$(($screen_height - $bottom_y))
+if [ "$#" -gt 1 ]; then
+    top_margin=$2
+else
+    top_margin=300
+fi
+if [ "$#" -gt 2 ]; then
+    bottom_margin=$3
+else
+    bottom_y=2080
+    bottom_margin=$(($screen_height - $bottom_y))
+fi
 # result=$(echo "scale=2; 5.5 + 3.2" | bc)
 ratio=$(echo "scale=4; ($screen_height - $top_margin - $bottom_margin) * 1.0/$screen_height" | bc)
 resize_height=$(echo "$crop_height*$ratio/1" | bc)

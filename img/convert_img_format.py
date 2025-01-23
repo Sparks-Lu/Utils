@@ -7,6 +7,7 @@ def convert_img(fn_full, output_ext):
     base, ext = os.path.splitext(bname)
     fn_new = os.path.join(os.path.dirname(fn_full), f'{base}{output_ext}')
     img = cv.imread(fn_full)
+    print(f'image shape: {img.shape}')
     cv.imwrite(fn_new, img)
     print(f'Wrote image {fn_new}')
 

@@ -24,9 +24,9 @@ sudo apt-get install -y \
     nvidia-cuda-toolkit \
     nvidia-cuda-toolkit-gcc
 
-# git clone https://github.com/colmap/colmap.git
-# cd colmap
-# mkdir build
+git clone https://github.com/colmap/colmap.git
+cd colmap
+mkdir build
 cd build
 cmake .. -GNinja
 ninja
