@@ -1,0 +1,2 @@
+fns='output/00.png output/01.png output/02.png output/03.png output/04.png output/05.png output/06.png output/07.png output/08.png output/09.png output/10.png output/11.png output/12.png output/13.png output/14.png output/15.png output/16.png output/17.png output/18.png output/19.png output/20.png output/21.png output/22.png output/23.png output/24.png output/25.png output/26.png output/27.png output/28.png'
+convert $fns /mnt/c/Download/output.gif
