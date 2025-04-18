@@ -32,6 +32,9 @@ def resize_img(full_path, ratio=None, max_wh=None,
         else:
             raise RuntimeError('Invalid scale ratio, target width or '
                                'height')
+    else:
+        dst_w = int(img_w * ratio_tmp)
+        dst_h = int(img_h * ratio_tmp)
     print(f'new image size: {dst_w}x{dst_h}')
     new_img = cv.resize(img, (dst_w, dst_h))
     basename = os.path.basename(full_path)
