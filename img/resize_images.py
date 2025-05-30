@@ -1,4 +1,5 @@
 import os
+import sys
 import cv2 as cv
 
 
@@ -95,7 +96,10 @@ def resize_imgs(path, ratio=None, max_wh=None,
 
 
 def main():
-    path = input('Input path where image files locates: ')
+    if len(sys.argv) > 1:
+        path = sys.argv[1]
+    else:
+        path = input('Input path where image files locates: ')
     if not os.path.isdir(path) and not os.path.isfile(path):
         print(f'Invalid image folder: {path}')
         return -1

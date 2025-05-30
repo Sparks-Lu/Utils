@@ -11,11 +11,11 @@ fi
 # cnt=1
 dirname=$1
 output_dir=${dirname}/output
-header_height=70
+header_height=80
 xoffset=0
 yoffset=$header_height
-width=1080
-height=$((2340 - header_height))
+width=1088
+height=$((2400 - header_height))
 echo "New height: ${height}"
 mkdir -p $output_dir
 for fn_in in $files; do
