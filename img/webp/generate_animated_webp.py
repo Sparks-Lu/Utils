@@ -9,9 +9,10 @@ import imageio
 
 
 def create_animated_webp(image_folder, output_file, duration_ms=None, max_wh=None):
-    imgs = [Image.open(os.path.join(image_folder, img))
-            for img in sorted(os.listdir(image_folder))
-            if img.endswith(('png', 'jpg', 'jpeg'))]
+    img_paths = [path for path in sorted(os.listdir(image_folder))
+                 if path.endswith(('.png', '.jpg', '.jpeg', '.PNG', '.JPG', '.JPEG'))]
+    print(f'Input image paths: {img_paths}')
+    imgs = [Image.open(os.path.join(image_folder, path)) for path in img_paths]
     base_width, base_height = imgs[0].size
     if max_wh is not None and (base_width > max_wh or base_height > max_wh):
         # resize to smaller than max_wh
@@ -28,7 +29,8 @@ def create_animated_webp(image_folder, output_file, duration_ms=None, max_wh=Non
         duration_ms = 3 / len(frames) * 1000
         if duration_ms > 200:
             duration_ms = 200
-    imageio.mimsave(output_file, frames, duration=duration_ms, loop=0)
+    imageio.mimsave(output_file, frames, duration=duration_ms,
+                    background_label=0, loop=0)
     print(f'Generated animated webp duration={duration_ms}: {output_file}')
 
 

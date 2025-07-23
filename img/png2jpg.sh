@@ -6,5 +6,5 @@ for file in $files; do
     basename=$(basename $file)
     base="${dirname}/${basename%.*}.JPG"
     echo "Converting $file to $base"
-    convert $file $base
+    convert -quality 90 $file $base
 done

@@ -22,8 +22,10 @@ output_file=$input_dir/output.webp
 webpmux_cmd="webpmux"
 max_wh=400
 echo "Generating animated webp from webp files in $input_dir ..."
-for i in {001..048}; do
-    input_file="${input_dir}/matting_${i}.webp"
+# for i in {001..048}; do
+for i in {001..018}; do
+    # input_file="${input_dir}/matting_${i}.webp"
+    input_file="${input_dir}/matting_${i}.png"
     frame_file="${input_dir}/frame_${i}.webp"
     # resize
     convert ${input_file} -resize ${max_wh}^x${max_wh}^ ${frame_file}
