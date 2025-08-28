@@ -1,0 +1,41 @@
+sequenceDiagram
+    participant User
+    participant MainActivity
+    participant LiveViewThread
+    participant ApiService
+    participant Camera
+
+    User->>MainActivity: 点击“开始预览”
+    MainActivity->>LiveViewThread: 开始处理LiveView流程
+    LiveViewThread->>ApiService: POST /liveview (设置 liveviewsize, cameradisplay)
+    ApiService->>Camera: HTTP POST 请求
+    Camera-->>ApiService: 200 OK (空 JSON)
+    ApiService-->>LiveViewThread: 配置成功
+    LiveViewThread-->>MainActivity: 回传配置结果
+
+    alt 配置失败
+        Camera-->>ApiService: 400/503 错误
+        ApiService-->>LiveViewThread: 返回错误
+        LiveViewThread-->>MainActivity: 回传错误信息
+        MainActivity->>User: 显示错误信息
+    end
+
+    LiveViewThread->>ApiService: GET /scroll (开始流式获取)
+    ApiService->>Camera: HTTP GET 请求 (chunked)
+    Camera-->>ApiService: 200 + Transfer-Encoding: chunked
+    loop 持续接收图像块
+        Camera-->>ApiService: 发送 JPEG chunk 数据
+        ApiService->>LiveViewThread: 接收JPEG数据
+        LiveViewThread->>MainActivity: 解码并传递每一帧给UI线程
+        MainActivity->>User: 在 ImageView/SurfaceView 显示帧
+    end
+
+    User->>MainActivity: 点击“停止预览”
+    MainActivity->>LiveViewThread: 发出停止预览指令
+    LiveViewThread->>ApiService: DELETE /scroll
+    ApiService->>Camera: HTTP DELETE 请求
+    Camera-->>ApiService: 200 OK
+    ApiService-->>LiveViewThread: 停止流
+    LiveViewThread-->>MainActivity: 通知预览已停止
+    MainActivity->>User: 清除预览画面
+
