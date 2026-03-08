@@ -13,7 +13,11 @@ def resize_img(full_path, ratio=None, max_wh=None,
     dst_w = None
     dst_h = None
     if ratio_tmp is None:
-        if target_width is not None and len(target_width) > 0:
+        if target_width is not None and target_height is not None:
+            # maybe non-proportional
+            dst_w = target_width
+            dst_h = target_height
+        elif target_width is not None:
             ratio_tmp = int(target_width) / img_w
             dst_w = target_width
             dst_h = int(img_h * dst_w / img_w)
@@ -111,8 +115,11 @@ def main():
         max_wh = input('Input max width/height: ')
         if max_wh is None or len(max_wh) == 0:
             target_width = input('Input target width: ')
-            if target_width is None or len(target_width) == 0:
-                target_height = input('Input target height: ')
+            target_height = input('Input target height: ')
+            if isinstance(target_width, str) and len(target_width) > 0:
+                target_width = int(target_width)
+            if isinstance(target_height, str) and len(target_height) > 0:
+                target_height = int(target_height)
     replace = input('Replace original (1) or not (0): ')
     replace = int(replace) > 0
     folder_name = ''

@@ -27,6 +27,7 @@ sequenceDiagram
         Camera-->>ApiService: 发送 JPEG chunk 数据
         ApiService->>LiveViewThread: 接收JPEG数据
         LiveViewThread->>MainActivity: 解码并传递每一帧给UI线程
+        MainActivity->>MainActivity: mHandler.post(Runnable) 投递给主线程消息队列
         MainActivity->>User: 在 ImageView/SurfaceView 显示帧
     end
 
